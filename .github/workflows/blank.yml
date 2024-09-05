@@ -34,7 +34,7 @@ jobs:
           body: 'This is a re-release of the asset from a private repository.'
           draft: false
           prerelease: false
-          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # 4. Upload the downloaded asset to the new release
       - name: Upload the asset to the new release
