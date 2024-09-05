@@ -2,7 +2,7 @@ name: Re-release from private repository
 
 on:
   repository_dispatch:
-    types:[my-event]
+    types: [my-event]
 
 jobs:
   download_and_release:
