@@ -12,8 +12,8 @@ jobs:
     - name: Download Build Artifact from BerichtsheftMakerUpdater Repo
       uses: actions/download-artifact@v3
       with:
-        name: BerichtsheftMakerUpdater-Exe.exe
-        path: ./
+        name: BerichtsheftMakerUpdater-Exe
+        path: BerichtsheftMakerUpdater/exe/BerichtsheftMakerUpdater.exe
 
     - name: Check if artifact exists
       run: |
