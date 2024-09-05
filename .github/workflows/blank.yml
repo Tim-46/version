@@ -1,40 +1,53 @@
-name: Create Release from Artifact
+name: Download and Release Updater
 
 on:
   repository_dispatch:
     types: [trigger-release]
 
 jobs:
-  release:
+  download_and_release:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download Build Artifact from BerichtsheftMakerUpdater Repo
-      uses: actions/download-artifact@v3
-      with:
-        name: BerichtsheftMakerUpdater-Exe
-        path: BerichtsheftMakerUpdater/exe/BerichtsheftMakerUpdater.exe
+    - name: Check out repository
+      uses: actions/checkout@v2
 
-    - name: Check if artifact exists
-      run: |
-        if [ ! -f "BerichtsheftMakerUpdater.exe" ]; then
-          echo "Artifact not found!"
-          exit 1
-        fi
-        echo "Artifact found!"
+    - name: Download the Latest Release Asset from `BerichtsheftMakerUpdater`
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const { Octokit } = require("@octokit/rest");
+          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+          const owner = 'Tim-46';
+          const repo = 'BerichtsheftMakerUpdater';
+          const release = await octokit.rest.repos.getLatestRelease({ owner, repo });
+          const asset = release.data.assets.find(a => a.name === 'BerichtsheftMakerUpdater.exe');
+
+          if (!asset) {
+            throw new Error('No release asset found.');
+          }
+
+          const downloadUrl = asset.browser_download_url;
+          const response = await octokit.request({ url: downloadUrl, method: 'GET' });
+          
+          const fs = require('fs');
+          const path = './BerichtsheftMakerUpdater.exe';
+          fs.writeFileSync(path, response.data);
+      env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       with:
-        tag_name: v1.0.${{ github.run_number }}
-        release_name: Release v1.0.${{ github.run_number }}
+        tag_name: "v1.0.${{ github.run_number }}"
+        release_name: "Release v1.0.${{ github.run_number }}"
         draft: false
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
-    - name: Upload Release Assets
+    - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -43,4 +56,3 @@ jobs:
         asset_content_type: application/octet-stream
       env:
         GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
