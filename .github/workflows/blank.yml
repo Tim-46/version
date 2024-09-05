@@ -32,4 +32,6 @@ jobs:
           body: "Release notes for BerichtsheftMakerUpdater v1.0"
           draft: false
           prerelease: false
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
+
 
