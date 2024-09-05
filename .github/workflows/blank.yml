@@ -1,29 +1,36 @@
-name: Create Release
+name: Create Release from Artifact
 
 on:
-  repository_dispatch:
-    types: [create_release]
+  workflow_run:
+    workflows: ["Build and Release to Version Repo"]
+    types:
+      - completed
 
 jobs:
-  create_release:
+  release:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
-
-    - name: Download Build Artifact
-      uses: actions/download-artifact@v2
+    - name: Download Build Artifact from BerichtsheftMakerUpdater Repo
+      uses: actions/download-artifact@v3  # Aktualisierung auf v3
       with:
         name: BerichtsheftMakerUpdater-Exe
-        path: ./ 
+        path: ./
+
+    - name: Check if artifact exists
+      run: |
+        if [ ! -f "BerichtsheftMakerUpdater.exe" ]; then
+          echo "Artifact not found!"
+          exit 1
+        fi
+        echo "Artifact found!"
 
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       with:
-        tag_name: ${{ github.event.client_payload.tag_name }}
-        release_name: ${{ github.event.client_payload.release_name }}
+        tag_name: v1.0.${{ github.run_number }}
+        release_name: Release v1.0.${{ github.run_number }}
         draft: false
         prerelease: false
       env:
