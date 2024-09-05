@@ -1,10 +1,8 @@
 name: Create Release from Artifact
 
 on:
-  workflow_run:
-    workflows: ["Build and Release to Version Repo"]
-    types:
-      - completed
+  repository_dispatch:
+    types: [trigger-release]
 
 jobs:
   release:
@@ -12,7 +10,7 @@ jobs:
 
     steps:
     - name: Download Build Artifact from BerichtsheftMakerUpdater Repo
-      uses: actions/download-artifact@v3  # Aktualisierung auf v3
+      uses: actions/download-artifact@v3
       with:
         name: BerichtsheftMakerUpdater-Exe
         path: ./
@@ -34,7 +32,7 @@ jobs:
         draft: false
         prerelease: false
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
     - name: Upload Release Assets
       uses: actions/upload-release-asset@v1
@@ -44,4 +42,5 @@ jobs:
         asset_name: BerichtsheftMakerUpdater.exe
         asset_content_type: application/octet-stream
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+
