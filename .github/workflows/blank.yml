@@ -1,58 +1,43 @@
-name: Download and Release Updater
+name: Create Release in Version Repo
 
 on:
-  repository_dispatch:
-    types: [trigger-release]
+  workflow_run:
+    workflows: ["Build and Release"]
+    types:
+      - completed
 
 jobs:
   download_and_release:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-    - name: Check out repository
+    - name: Check out version repository
       uses: actions/checkout@v2
 
-    - name: Download the Latest Release Asset from `BerichtsheftMakerUpdater`
-      uses: actions/github-script@v6
+    - name: Download Artifact from BerichtsheftMakerUpdater
+      uses: actions/download-artifact@v2
       with:
-        script: |
-          const { Octokit } = require("@octokit/rest");
-          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-          const owner = 'Tim-46';
-          const repo = 'BerichtsheftMakerUpdater';
-          const release = await octokit.rest.repos.getLatestRelease({ owner, repo });
-          const asset = release.data.assets.find(a => a.name === 'BerichtsheftMakerUpdater.exe');
-
-          if (!asset) {
-            throw new Error('No release asset found.');
-          }
-
-          const downloadUrl = asset.browser_download_url;
-          const response = await octokit.request({ url: downloadUrl, method: 'GET' });
-          
-          const fs = require('fs');
-          const path = './BerichtsheftMakerUpdater.exe';
-          fs.writeFileSync(path, response.data);
-      env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        name: BerichtsheftMakerUpdater-Exe
+        path: ./  # Download to the current directory
 
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       with:
-        tag_name: "v1.0.${{ github.run_number }}"
-        release_name: "Release v1.0.${{ github.run_number }}"
+        tag_name: v1.0.${{ github.run_number }}
+        release_name: Release v1.0.${{ github.run_number }}
         draft: false
         prerelease: false
       env:
-        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload Release Asset
+    - name: Upload Release Assets
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./BerichtsheftMakerUpdater.exe
+        asset_path: ./BerichtsheftMakerUpdater.exe  # Ensure the path is correct
         asset_name: BerichtsheftMakerUpdater.exe
         asset_content_type: application/octet-stream
       env:
-        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
