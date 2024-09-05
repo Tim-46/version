@@ -1,4 +1,4 @@
-name: Create Release from Dispatch
+name: Create Release
 
 on:
   repository_dispatch:
@@ -38,4 +38,3 @@ jobs:
         asset_content_type: application/octet-stream
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
