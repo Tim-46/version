@@ -1,15 +1,12 @@
 name: Create Release in Version Repo
 
 on:
-  workflow_run:
-    workflows: ["dotnet-desktop.yml"]
-    types:
-      - completed
+  repository_dispatch:
+    types: [trigger_version_release]
 
 jobs:
   download_and_release:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
     - name: Check out version repository
