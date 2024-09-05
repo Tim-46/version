@@ -2,7 +2,7 @@ name: Create Release in Version Repo
 
 on:
   workflow_run:
-    workflows: ["Build and Upload Artifact"]
+    workflows: ["dotnet-desktop.yml"]
     types:
       - completed
 
