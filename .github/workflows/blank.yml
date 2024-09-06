@@ -13,7 +13,7 @@ jobs:
       - name: Checkout current repository
         uses: actions/checkout@v3
 
-      # 2. Download the latest release asset (.exe) from the private repository
+      # 2. Finde und downloade die .exe-Datei aus dem privaten Release
       - name: Download release from private repository
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
@@ -24,24 +24,21 @@ jobs:
             https://api.github.com/repos/Tim-46/BerichtsheftMakerUpdater/releases/latest \
             | jq -r '.assets[] | select(.name | endswith(".exe")).browser_download_url')
 
-          # Zeige die gefundene URL an (Debugging)
           echo "Download URL: $DOWNLOAD_URL"
 
-          # Lade die Datei herunter
-          curl -L "$DOWNLOAD_URL" -o BerichtsheftMakerUpdater.exe
+          # Lade die .exe-Datei herunter
+          curl -L -H "Authorization: token $GITHUB_TOKEN" "$DOWNLOAD_URL" -o BerichtsheftMakerUpdater.exe
 
-      # 3. Überprüfe die heruntergeladene Datei
-      - name: Verify downloaded file
-        run: |
+          # Zeige die Dateigröße und den Dateityp an, um sicherzustellen, dass der Download erfolgreich war
           ls -lh BerichtsheftMakerUpdater.exe
           file BerichtsheftMakerUpdater.exe
 
-      # 4. Create a new release in the current repository
+      # 3. Erstelle ein neues Release im aktuellen Repository
       - name: Create new release in current repository
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: 'v1.0.${{ github.run_number }}'  # Version mit github.run_number
+          tag_name: v1.0.${{ github.run_number }}  # Beispiel: Festlegung der Version
           release_name: 'Re-release of the asset'
           body: 'This is a re-release of the asset from a private repository.'
           draft: false
@@ -49,7 +46,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
-      # 5. Upload the downloaded .exe to the new release
+      # 4. Lade die .exe-Datei in das neue Release hoch
       - name: Upload the .exe to the new release
         uses: actions/upload-release-asset@v1
         with:
