@@ -35,7 +35,7 @@ jobs:
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Verwende hier deinen PAT
 
       # 4. Upload the downloaded asset to the new release
       - name: Upload the asset to the new release
@@ -45,3 +45,5 @@ jobs:
           asset_path: ./asset.zip
           asset_name: asset.zip
           asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}  # Verwende hier auch deinen PAT
