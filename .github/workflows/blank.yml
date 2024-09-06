@@ -1,20 +1,22 @@
-name: Re-release .exe file
+name: Re-release from private repository
 
 on:
   repository_dispatch:
-  release:
     types: [my-event]
 
 jobs:
-  re_release:
+  download_and_release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # 1. Checkout current repository
+      - name: Checkout current repository
         uses: actions/checkout@v3
 
-      - name: Finde die Download-URL der .exe-Datei
-        id: get_download_url
+      # 2. Liste alle Assets im Release auf
+      - name: List all release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         run: |
           # Hole alle Assets des neuesten Releases
           ASSETS=$(curl -H "Authorization: token $GITHUB_TOKEN" \
@@ -33,46 +35,31 @@ jobs:
           
           echo "Download URL: $DOWNLOAD_URL"
           
-          # Falls die URL leer ist, abbrechen
-          if [ -z "$DOWNLOAD_URL" ]; then
-            echo "Error: Keine .exe-Datei gefunden."
-            exit 1
-          fi
-          
-          echo "::set-output name=download_url::$DOWNLOAD_URL"
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
-      - name: Lade die .exe-Datei herunter und zeige Debug-Informationen an
-        run: |
           # Lade die .exe-Datei herunter
-          curl -v -L -H "Authorization: token $GITHUB_TOKEN" "$DOWNLOAD_URL" -o BerichtsheftMakerUpdater.exe
+          curl -L -H "Authorization: token $GITHUB_TOKEN" "$DOWNLOAD_URL" -o BerichtsheftMakerUpdater.exe
           
-          # Zeige die Dateigröße und den Dateityp an, um sicherzustellen, dass der Download erfolgreich war
+          # Zeige die HTTP-Antwort und die Dateigröße an
           ls -lh BerichtsheftMakerUpdater.exe
           file BerichtsheftMakerUpdater.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-        shell: bash
 
-      - name: Erstelle ein neues Release
+      # 3. Erstelle ein neues Release im aktuellen Repository
+      - name: Create new release in current repository
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: v1.0.${{ github.run_number }}
-          release_name: Re-release of the .exe file
-          body: This is a re-release of the .exe file from a private repository.
+          tag_name: v1.0.${{ github.run_number }}  # Beispiel: Festlegung der Version
+          release_name: 'Re-release of the asset'
+          body: 'This is a re-release of the asset from a private repository.'
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
-      - name: Lade die .exe in das neue Release hoch
+      # 4. Lade die .exe-Datei in das neue Release hoch
+      - name: Upload the .exe to the new release
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./BerichtsheftMakerUpdater.exe
           asset_name: BerichtsheftMakerUpdater.exe
           asset_content_type: application/octet-stream
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
