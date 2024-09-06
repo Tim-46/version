@@ -32,6 +32,13 @@ jobs:
             | jq -r '.assets[] | select(.name | endswith(".exe")).browser_download_url')
           
           echo "Download URL: $DOWNLOAD_URL"
+          
+          # Falls die URL leer ist, abbrechen
+          if [ -z "$DOWNLOAD_URL" ]; then
+            echo "Error: Keine .exe-Datei gefunden."
+            exit 1
+          fi
+          
           echo "::set-output name=download_url::$DOWNLOAD_URL"
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
@@ -69,4 +76,3 @@ jobs:
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
