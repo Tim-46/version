@@ -44,18 +44,7 @@ jobs:
           tag_name: v1.0.${{ github.run_number }}  # Beispiel: Festlegung der Version
           release_name: 'Re-release of the asset'
           body: 'This is a re-release of the asset from a private repository.'
-          draft: false
+          draft: true
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
-      # 4. Lade die .exe-Datei in das neue Release hoch
-      - name: Upload the .exe to the new release
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./BerichtsheftMakerUpdater.exe
-          asset_name: BerichtsheftMakerUpdater.exe
-          asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
