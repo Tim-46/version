@@ -4,6 +4,7 @@
       "name": "BerichtsheftArbeit",
       "fileName": "Berichtsheft_Vorlage.docx",
       "fileType": "docx",
+      "templateType":"arbeit",
       "version": "1.0",
       "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage.docx"
     },
@@ -11,6 +12,7 @@
       "name": "BerichtsheftSchule",
       "fileName": "Berichtsheft_Vorlage_Schule.docx",
       "fileType": "docx",
+      "templateType":"schule",
       "version": "1.0",
       "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage_Schule.docx"
     },
@@ -18,6 +20,7 @@
       "name": "Berichtsheft_Vorlage_New",
       "fileName": "Berichtsheft_Vorlage.dotx",
       "fileType": "dotx",
+      "templateType":"arbeit",
       "version": "1.2",
       "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage.dotx"
     },
@@ -25,6 +28,7 @@
       "name": "Berichtsheft_Vorlage_Schule_New",
       "fileName": "Berichtsheft_Vorlage_Schule.dotx",
       "fileType": "dotx",
+      "templateType":"arbeit",
       "version": "2.0",
       "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage_Schule.dotx"
     }
