@@ -4,33 +4,37 @@
       "name": "BerichtsheftArbeit",
       "fileName": "Berichtsheft_Vorlage.docx",
       "fileType": "docx",
-      "templateType":"arbeit",
+      "templateType": "arbeit",
       "version": "1.0",
-      "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage.docx"
+      "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage.docx",
+      "id": "d17f9cfc-22c8-4141-8cd0-1dc4d0960412"
     },
     {
       "name": "BerichtsheftSchule",
       "fileName": "Berichtsheft_Vorlage_Schule.docx",
       "fileType": "docx",
-      "templateType":"schule",
+      "templateType": "schule",
       "version": "1.0",
-      "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage_Schule.docx"
+      "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage_Schule.docx",
+      "id": "0337ee9b-76cd-41ef-9bfe-15dea6c88cc0"
     },
     {
       "name": "Berichtsheft_Vorlage_New",
       "fileName": "Berichtsheft_Vorlage.dotx",
       "fileType": "dotx",
-      "templateType":"arbeit",
+      "templateType": "arbeit",
       "version": "1.0",
-      "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage.dotx"
+      "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage.dotx",
+      "id": "b5cf0fd6-bc23-4de5-9410-a52a99425ab1"
     },
     {
       "name": "Berichtsheft_Vorlage_Schule_New",
       "fileName": "Berichtsheft_Vorlage_Schule.dotx",
       "fileType": "dotx",
-      "templateType":"schule",
+      "templateType": "schule",
       "version": "1.0",
-      "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage_Schule.dotx"
+      "downloadUrl": "https://raw.githubusercontent.com/Tim-46/version/main/Resources/Berichtsheft_Vorlage_Schule.dotx",
+      "id": "55a9cf88-b8b8-4d66-b886-9a72370e78ff"
     }
   ]
 }
